@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="現代文・古文・漢文の道場への入口。使い方と、3つの道場で共通の付喪神（相棒とガチャ）の説明。">
+<title>国語道場</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#f5efe0; --paper:#fffbf2; --ink:#2a251c; --soft:#6d6553; --line:#dccfae; --card2:#efe6cf;
+    --gendai:#3d6b4f; --gendai-bg:#e3eee6;
+    --kobun:#2c3e66;  --kobun-bg:#e3e7f1; --yamabuki:#c98a1c;
+    --kanbun:#9e2b25; --kanbun-bg:#f4e2df;
+    --shadow:rgba(42,37,28,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15141d; --paper:#1f1d2a; --ink:#eee7d5; --soft:#aaa18c; --line:#3a3650; --card2:#29263a;
+      --gendai:#8cc4a0; --gendai-bg:#1f3129; --kobun:#9fb2e0; --kobun-bg:#212a44; --yamabuki:#e0ac47;
+      --kanbun:#e59a92; --kanbun-bg:#3a2321; --shadow:rgba(0,0,0,.45);
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN',system-ui,sans-serif; line-height:1.8; -webkit-font-smoothing:antialiased; }
+  .stage{ max-width:760px; margin:0 auto; padding:34px 18px 60px; }
+  a{ color:inherit; }
+
+  header{ text-align:center; margin-bottom:28px; }
+  .seal{ display:inline-flex; gap:6px; margin-bottom:10px; }
+  .seal span{ width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Shippori Mincho',serif; font-weight:800; font-size:1rem; }
+  h1{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:clamp(2rem,1.4rem + 3vw,2.8rem); margin:0; letter-spacing:.12em; }
+  header p{ margin:6px auto 0; color:var(--soft); max-width:34em; font-size:.95rem; }
+
+  .subjects{ display:grid; gap:14px; }
+  @media (min-width:720px){ .subjects{ grid-template-columns:repeat(3,1fr); } }
+  .subj{ background:var(--paper); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 3px 14px var(--shadow);
+    display:flex; flex-direction:column; }
+  .subj .top{ padding:14px 16px 10px; border-top:6px solid var(--c); background:var(--cbg); }
+  .subj h2{ margin:0; font-family:'Shippori Mincho',serif; font-size:1.5rem; color:var(--c); letter-spacing:.08em; }
+  .subj .lead{ margin:2px 0 0; font-size:.82rem; color:var(--soft); line-height:1.6; }
+  .subj ul{ list-style:none; margin:0; padding:6px 8px 10px; }
+  .subj li a{ display:block; text-decoration:none; padding:10px 10px; border-radius:10px; }
+  .subj li a:hover, .subj li a:focus-visible{ background:var(--cbg); }
+  .subj li a:focus-visible{ outline:3px solid var(--yamabuki); outline-offset:1px; }
+  .subj li b{ display:block; color:var(--c); font-size:1rem; }
+  .subj li b::after{ content:" ›"; }
+  .subj li span{ display:block; font-size:.8rem; color:var(--soft); line-height:1.55; }
+  .gendai{ --c:var(--gendai); --cbg:var(--gendai-bg); }
+  .kobun{ --c:var(--kobun); --cbg:var(--kobun-bg); }
+  .kanbun{ --c:var(--kanbun); --cbg:var(--kanbun-bg); }
+
+  .partner{ margin:22px 0 0; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
+    display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap; box-shadow:0 3px 14px var(--shadow); }
+  .partner .pic{ width:84px; height:84px; flex:none; }
+  .partner .pic svg{ width:100%; height:100%; overflow:visible; }
+  .partner .txt{ flex:1; min-width:170px; }
+  .partner .who{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:1.15rem; }
+  .partner .meta{ font-size:.82rem; color:var(--soft); }
+  .partner button{ font:inherit; font-weight:700; border:1.5px solid var(--ink); background:transparent; color:inherit;
+    border-radius:10px; padding:8px 12px; cursor:pointer; white-space:nowrap; }
+  @media (max-width:520px){ .partner button{ width:100%; padding:10px; } }
+
+  section.guide{ margin-top:34px; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:6px 20px 18px; box-shadow:0 3px 14px var(--shadow); }
+  section.guide > h2{ font-family:'Shippori Mincho',serif; font-size:1.4rem; margin:18px 0 4px; letter-spacing:.06em; }
+  section.guide h3{ font-family:'Shippori Mincho',serif; font-size:1.1rem; margin:24px 0 6px; padding-left:10px; border-left:5px solid var(--yamabuki); }
+  section.guide p{ margin:0 0 10px; }
+  section.guide ol, section.guide ul{ margin:0 0 10px; padding-left:1.4em; }
+  section.guide li{ margin-bottom:4px; }
+  .note{ font-size:.86rem; color:var(--soft); }
+  .table-wrap{ overflow-x:auto; }
+  table{ border-collapse:collapse; width:100%; font-size:.9rem; margin:4px 0 12px; }
+  th, td{ border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+  th{ background:var(--card2); font-weight:700; width:6.5em; }
+  section.guide .flow{ padding:0; }
+  .flow{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin:8px 0 12px; padding:0; list-style:none; counter-reset:f; }
+  .flow li{ background:var(--card2); border-radius:10px; padding:10px 12px; font-size:.88rem; line-height:1.6; counter-increment:f; margin:0; }
+  .flow li::before{ content:counter(f, cjk-ideographic); display:block; font-family:'Shippori Mincho',serif; font-weight:800; color:var(--yamabuki); font-size:1.1rem; }
+  .stages{ display:flex; gap:6px; align-items:flex-end; justify-content:center; margin:6px 0 4px; flex-wrap:wrap; }
+  .stages figure{ margin:0; text-align:center; width:96px; }
+  .stages svg{ width:100%; overflow:visible; }
+  .stages figcaption{ font-size:.76rem; color:var(--soft); line-height:1.4; }
+  .stages .arrow{ align-self:center; color:var(--soft); font-size:1.3rem; padding-bottom:24px; }
+  details{ border-bottom:1px dashed var(--line); padding:8px 0; }
+  details summary{ cursor:pointer; font-weight:700; }
+  details p{ margin:6px 0 2px; }
+  footer{ text-align:center; font-size:.76rem; color:var(--soft); margin-top:30px; line-height:1.7; }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .stages svg, :root:not([data-theme="light"]) .partner .pic svg{ filter:drop-shadow(0 0 1.2px rgba(255,250,235,.85)); }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <header>
+    <div class="seal" aria-hidden="true"><span style="background:var(--gendai)">現</span><span style="background:var(--kobun)">古</span><span style="background:var(--kanbun)">漢</span></div>
+    <h1>国語道場</h1>
+    <p>現代文・古文・漢文を、スマホで少しずつ。アカウント登録なしで、ひらいたその場から始められます。</p>
+  </header>
+
+  <nav class="subjects" aria-label="道場を選ぶ">
+    <div class="subj gendai">
+      <div class="top"><h2>現代文</h2><p class="lead">評論・小説を読むための言葉</p></div>
+      <ul>
+        <li><a href="https://upopotennis-gif.github.io/gendaibun-keyword/"><b>現代文キーワード辞典</b><span>重要語の辞典・暗記カード・四択。復習の時期を知らせてくれる</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/gendaibun-keyword/guide/"><b>学習ガイド</b><span>分野ごとの読み物と解説動画</span></a></li>
+      </ul>
+    </div>
+    <div class="subj kobun">
+      <div class="top"><h2>古文</h2><p class="lead">文法・単語・古典常識</p></div>
+      <ul>
+        <li><a href="https://upopotennis-gif.github.io/kobun-dojo/"><b>文法道場</b><span>用言・助動詞・助詞・敬語などを単元ごとに4択と学習ガイドで</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/kobun-dojo/tango.html"><b>単語道場</b><span>『Look@古文単語337』の番号で範囲を選んで、例文の意味を4択</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/kobun-dojo/joshiki.html"><b>常識道場</b><span>暦・官職・住まい・装束・恋愛・信仰など、読むための常識</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/kobun-dojo/jissen.html"><b>実戦道場</b><span>入試レベルの助動詞と現代語訳。難易度つき</span></a></li>
+      </ul>
+    </div>
+    <div class="subj kanbun">
+      <div class="top"><h2>漢文</h2><p class="lead">句形・語句・背景知識</p></div>
+      <ul>
+        <li><a href="https://upopotennis-gif.github.io/kanbun-dojo/"><b>漢文辞典</b><span>句形・語句・訓読・背景の辞典。暗記カードと四択</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/kanbun-dojo/kukei.html"><b>句形道場</b><span>否定・疑問・使役などの句形を単元ごとに4択</span></a></li>
+        <li><a href="https://upopotennis-gif.github.io/kanbun-dojo/haikei.html"><b>背景知識</b><span>諸子百家・中国史・漢詩・故事成語の読み物</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="partner" id="partner" hidden>
+    <div class="pic" id="partner-pic"></div>
+    <div class="txt"><div class="who" id="partner-who"></div><div class="meta" id="partner-meta"></div></div>
+    <button type="button" id="partner-open">図鑑とガチャ</button>
+  </div>
+
+  <section class="guide" aria-labelledby="g-title">
+    <h2 id="g-title">国語道場の使い方</h2>
+    <p class="note">現代文・古文・漢文の道場で共通のきまりです。</p>
+
+    <h3>道場の基本</h3>
+    <ul class="flow">
+      <li>上の一覧から、学びたい道場と単元（範囲）を選ぶ</li>
+      <li>1回は10問。4つの選択肢から答えを選ぶ</li>
+      <li>答えるとすぐに正誤と解説が出る。正解しても解説は読む</li>
+      <li>間違えた問題は「苦手ボックス」にたまり、正解すると消える</li>
+    </ul>
+    <p>辞典（現代文キーワード辞典・漢文辞典）は、まず<b>辞典で読む → 暗記カードでめくる → 四択で確かめる</b>の順で使います。
+      覚えた語は、忘れかけたころに「今日の復習」として戻ってきます。</p>
+
+    <h3>おすすめの進め方</h3>
+    <ul>
+      <li><b>毎日1セット（10問）から。</b>まとめてたくさん解くより、毎日少しずつのほうが残ります。</li>
+      <li><b>授業の範囲に合わせる。</b>単語道場は小テストの番号で範囲を選べます。</li>
+      <li><b>間違えた問題は、その日のうちにもう一度。</b>結果画面の「間違えた問題だけもう一度」か、苦手ボックスから。</li>
+      <li><b>学習ガイドを先に読む。</b>文法・常識・句形は、単元ごとの要点まとめがあります。</li>
+    </ul>
+
+    <h3>付喪神（つくもがみ）― 育つ相棒とガチャ</h3>
+    <p>付喪神は、長く使われた道具に宿る小さな神さま。国語道場では、筆・硯・竹簡・辞書・鉛筆などの付喪神が、あなたの学習の相棒になります。
+      画面の右下にいるのがあなたの相棒です。はじめは卵なので、押して最初の1体を選んでください。</p>
+    <div class="stages" id="stages" aria-label="相棒の進化の例"></div>
+    <div class="table-wrap"><table id="rules-table">
+      <tr><th>墨玉（すみだま）</th><td id="r-coin">―</td></tr>
+      <tr><th>相棒が育つ</th><td id="r-xp">―</td></tr>
+      <tr><th>進化</th><td id="r-stage">―</td></tr>
+      <tr><th>ガチャ</th><td id="r-gacha">―</td></tr>
+      <tr><th>秘の付喪神</th><td id="r-secret">―</td></tr>
+    </table></div>
+    <ul>
+      <li><b>現代文・古文・漢文の3つの道場で、同じ相棒と図鑑を使います。</b>古文で育てた相棒は、漢文や現代文を解いても育ちます。</li>
+      <li><b>お金は一切かかりません。</b>墨玉は問題を解くことでしか増えません。</li>
+      <li>答えを当てずっぽうで押し続けても、1日に問題から得られる墨玉には上限があります。1問ずつ考えて解くのがいちばんの近道です。</li>
+    </ul>
+
+    <h3>学習の記録について</h3>
+    <ul>
+      <li>記録（正答率・苦手ボックス・付喪神）は、<b>いま使っている端末のブラウザの中だけ</b>に残ります。先生や他の人に送られることはありません。</li>
+      <li>別の端末や別のブラウザでは、記録は別々になります。いつも同じ端末・同じブラウザで開くと続きから使えます。</li>
+      <li>ブラウザの履歴やサイトデータを消すと、記録も消えます。プライベートモード（シークレットモード）では記録が残りません。</li>
+    </ul>
+
+    <h3>スマホのホーム画面に置く</h3>
+    <ul>
+      <li><b>iPhone（Safari）</b>：下の共有ボタン → 「ホーム画面に追加」</li>
+      <li><b>Android（Chrome）</b>：右上の「︙」 → 「ホーム画面に追加」</li>
+    </ul>
+    <p class="note">このページをホーム画面に置いておけば、3つの道場へすぐに行けます。</p>
+
+    <h3>よくある質問</h3>
+    <details><summary>記録や相棒が消えてしまった</summary>
+      <p>ブラウザのサイトデータが消えたか、別のブラウザ・プライベートモードで開いている可能性があります。記録は端末の中にしかないため、元に戻すことはできません。</p></details>
+    <details><summary>右下に相棒が出てこない</summary>
+      <p>古い画面が残っていることがあります。ページを再読み込みしてください。現代文・古文・漢文の道場と、このページに出ます。</p></details>
+    <details><summary>ガチャで同じ付喪神が出た</summary>
+      <p>「かけら」になり、その付喪神の経験が増えます。図鑑で相棒に選ぶと、次の姿へ近づいています。</p></details>
+    <details><summary>問題や解説のまちがいを見つけた</summary>
+      <p>国語の先生に、道場の名前と問題文を伝えてください。</p></details>
+  </section>
+
+  <footer>国語道場 ― 現代文キーワード辞典・古文道場・漢文道場<br>
+    単語道場の例文・訳・解説の一部は『Look@古文単語337』の教師用データを、発行元の許諾を得て掲載しています。</footer>
+</div>
+
+<script src="tsukumo.js" data-subject="all"></script>
+<script>
+(function(){
+  "use strict";
+  var T = window.Tsukumo;
+  if(!T) return;
+  var R = T.rules, RA = T.rarity, SL = T.stageLabel;
+  function $(id){ return document.getElementById(id); }
+
+  // ルールの数字は tsukumo.js から読む（二重に書くと食い違うため）
+  $("r-coin").innerHTML = "正解1問で " + R.coinPerCorrect + " 枚。1セット解き終えると " + R.coinSet + " 枚、全問正解なら さらに " + R.coinPerfect +
+    " 枚、その日最初のセットは さらに " + R.coinFirstOfDay + " 枚。問題から得られるのは1日 " + R.dailyAnswerCap + " 枚まで。";
+  $("r-xp").innerHTML = "正解するたびに経験 " + R.xpPerCorrect + "、1セット解き終えると " + R.xpSet +
+    "。相棒と同じ教科（筆なら古文）の問題を解くと " + R.xpSameSubject + " 倍。";
+  $("r-stage").innerHTML = SL.join(" → ") + " の3段階。" +
+    ["nami","chin","ki"].map(function(k){ return RA[k].label + "は経験 " + R.stages[k][1] + " と " + R.stages[k][2]; }).join("、") + " で進化。";
+  $("r-gacha").innerHTML = "1回 墨玉 " + R.cost + " 枚。並 " + R.rates.nami + "%・珍 " + R.rates.chin + "%・稀 " + R.rates.ki +
+    "%。稀が出ないまま " + R.pity + " 回目は必ず稀。開いている道場の教科の付喪神が出やすい。持っている付喪神が出たら「かけら」になり、その子の経験が増える。";
+  var secrets = T._chars.filter(function(c){ return c.r === "hi"; });
+  $("r-secret").innerHTML = "ガチャでは出ない、やりこみの証。" + secrets.map(function(c){ return "「" + c.how + "」"; }).join("・") +
+    " を達成すると1体ずつ現れる（どんな姿かは、会ってのお楽しみ）。";
+
+  // 進化の例（筆の付喪神）
+  var h = "";
+  for(var s=0;s<3;s++){
+    h += '<figure>' + T._art("fude", s) + '<figcaption>' + T._chars[0].n[s] + "<br>" + SL[s] + "</figcaption></figure>";
+    if(s < 2) h += '<span class="arrow" aria-hidden="true">→</span>';
+  }
+  $("stages").innerHTML = h;
+
+  // あなたの相棒
+  T.onChange(function(S){
+    var box = $("partner");
+    if(!S.partner){
+      box.hidden = false;
+      $("partner-pic").innerHTML = "";
+      $("partner-who").textContent = "まだ相棒がいません";
+      $("partner-meta").textContent = "右のボタンから、最初の相棒を1体えらべます。墨玉 " + S.coins + " 枚";
+      return;
+    }
+    var st = T.stageOf(S.partner), c = T._chars.filter(function(x){ return x.id === S.partner; })[0];
+    box.hidden = false;
+    $("partner-pic").innerHTML = T._art(S.partner, st);
+    $("partner-who").textContent = "あなたの相棒：" + c.n[st];
+    $("partner-meta").textContent = SL[st] + "・墨玉 " + S.coins + " 枚・図鑑 " + Object.keys(S.owned).length + " / " + T._chars.length +
+      " 種・通算の正解 " + S.total.correct + " 問";
+  });
+  $("partner-open").addEventListener("click", function(){ T.open(); });
+})();
+</script>
+</body>
+</html>
