@@ -39,6 +39,24 @@
   h1 .nobr{ white-space:nowrap; }
   header p{ margin:6px auto 0; color:var(--soft); max-width:34em; font-size:.95rem; }
 
+  /* 更新情報 */
+  .news{ margin:0 0 18px; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:12px 14px 8px; box-shadow:0 3px 14px var(--shadow); }
+  .news h2{ font-family:'Shippori Mincho',serif; font-size:1.15rem; margin:0 0 2px; letter-spacing:.06em; padding-left:10px; border-left:5px solid var(--yamabuki); }
+  .news ul{ list-style:none; margin:0; padding:0; }
+  .news li{ border-top:1px dashed var(--line); }
+  .news li:first-child{ border-top:0; }
+  .news .row{ display:flex; flex-wrap:wrap; align-items:center; gap:2px 8px; padding:9px 6px; min-height:44px; text-decoration:none; border-radius:10px; }
+  .news a.row:hover, .news a.row:focus-visible{ background:var(--card2); }
+  .news a.row:focus-visible{ outline:3px solid var(--yamabuki); outline-offset:1px; }
+  .news time{ font-size:.875rem; color:var(--soft); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .news .tag{ font-size:.875rem; font-weight:700; line-height:1.5; color:var(--paper); background:var(--c); border-radius:6px; padding:0 7px; white-space:nowrap; }
+  .news .kind{ font-size:.875rem; font-weight:700; color:var(--yamabuki); letter-spacing:.04em; }
+  .news .what{ flex:1 1 100%; font-size:.95rem; line-height:1.6; }
+  .news a.row .what::after{ content:" ›"; color:var(--soft); }
+  .news .all{ --c:var(--soft); }
+  .news details{ border-bottom:0; border-top:1px dashed var(--line); padding:0; }
+  .news details summary{ padding:10px 6px; min-height:44px; font-size:.875rem; color:var(--soft); font-weight:500; }
+
   .subjects{ display:grid; gap:14px; }
   @media (min-width:720px){ .subjects{ grid-template-columns:repeat(3,1fr); } }
   .subj{ background:var(--paper); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 3px 14px var(--shadow);
@@ -105,6 +123,12 @@
     <h1><span class="nobr">渡邊梢太の</span><span class="nobr">国語道場</span></h1>
     <p>現代文・古文・漢文を、スマホで少しずつ。アカウント登録なしで、ひらいたその場から始められます。</p>
   </header>
+
+  <section class="news" id="news" aria-labelledby="news-title" hidden>
+    <h2 id="news-title">更新情報</h2>
+    <ul id="news-latest"></ul>
+    <details id="news-more" hidden><summary id="news-more-label"></summary><ul id="news-older"></ul></details>
+  </section>
 
   <nav class="subjects" aria-label="道場を選ぶ">
     <div class="subj gendai">
@@ -216,6 +240,51 @@
     単語道場の例文・訳・解説の一部は『Look@古文単語337』の教師用データを、発行元の許諾を得て掲載しています。</footer>
 </div>
 
+<script>
+/* ==== 更新情報 ====
+   道場を公開・更新したら、この NEWS のいちばん上に1行足す（新しい順）。
+     d: 日付（YYYY-MM-DD）
+     s: 教科  gendai / kobun / kanbun / all（共通）
+     k: NEW（新しい道場・ページ）／ UP（問題や機能の追加）
+     t: ひとこと（何が増えたか。数字があれば入れる）
+     u: 行き先のURL（無ければ省く）
+   上の SHOW 件だけを表に出し、残りは「これまでの更新」に畳む。 */
+(function(){
+  "use strict";
+  var SHOW = 3;
+  var B = "https://upopotennis-gif.github.io/";
+  var NEWS = [
+    { d:"2026-11-18", s:"kobun",  k:"NEW", t:"絵巻道場ができました。文法の4択で物の怪をしずめ、絵巻の地図を進みます", u:B+"kobun-emaki/" },
+    { d:"2026-11-18", s:"kobun",  k:"UP",  t:"文法道場に敬語の3単元（識別・現代語訳・読解）を追加。古文読解も10題増えて、あわせて400問アップ", u:B+"kobun-dojo/" },
+    { d:"2026-11-18", s:"kobun",  k:"UP",  t:"常識道場に「図で考える」3単元・60問を追加", u:B+"kobun-dojo/joshiki.html" },
+    { d:"2026-11-11", s:"gendai", k:"NEW", t:"表現道場ができました。表現技法辞典・表現の効果 演習（80問）・表現問題の読み方", u:B+"hyogen-dojo/" },
+    { d:"2026-11-08", s:"all",    k:"UP",  t:"付喪神に古文の19体が仲間入り。図鑑は全47種になりました" }
+  ];
+  var NAME = { gendai:"現代文", kobun:"古文", kanbun:"漢文", all:"共通" };
+  function row(n){
+    var li = document.createElement("li");
+    var a = document.createElement(n.u ? "a" : "div");
+    a.className = "row " + n.s;
+    if(n.u) a.href = n.u;
+    var p = n.d.split("-");
+    var tm = document.createElement("time"); tm.dateTime = n.d; tm.textContent = Number(p[1]) + "/" + Number(p[2]);
+    var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = NAME[n.s] || "";
+    var kind = document.createElement("span"); kind.className = "kind"; kind.textContent = n.k;
+    var what = document.createElement("span"); what.className = "what"; what.textContent = n.t;
+    a.appendChild(tm); a.appendChild(tag); a.appendChild(kind); a.appendChild(what);
+    li.appendChild(a);
+    return li;
+  }
+  if(!NEWS.length) return;
+  var latest = document.getElementById("news-latest"), older = document.getElementById("news-older");
+  NEWS.forEach(function(n, i){ (i < SHOW ? latest : older).appendChild(row(n)); });
+  if(NEWS.length > SHOW){
+    document.getElementById("news-more-label").textContent = "これまでの更新（" + (NEWS.length - SHOW) + "件）";
+    document.getElementById("news-more").hidden = false;
+  }
+  document.getElementById("news").hidden = false;
+})();
+</script>
 <script src="tsukumo.js" data-subject="all"></script>
 <script>
 (function(){
